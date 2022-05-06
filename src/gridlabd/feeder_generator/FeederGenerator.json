@@ -1,6 +1,3 @@
-https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
-
-
 {
   "feedergenerator": {
     "constants": {
@@ -12,25 +9,31 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": 138000.0,
         "comment": ""
       },
-      "transmissionXfmrMVAbase": {
-        "value": 12.0,
-        "comment": ""
-      },
-      "transmissionXfmrXpct": {
-        "value": 8.0,
-        "comment": ""
-      },
-      "transmissionXfmrRpct": {
-        "value": 1.0,
-        "comment": ""
-      },
-      "transmissionXfmrNLLpct": {
-        "value": 0.4,
-        "comment": ""
-      },
-      "transmissionXfmrImagpct": {
-        "value": 1.0,
-        "comment": ""
+      "xmfr": {
+        "transmissionXfmrMVAbase": {
+          "value": 12.0,
+          "comment": ""
+        },
+        "transmissionXfmrXpct": {
+          "value": 8.0,
+          "comment": ""
+        },
+        "transmissionXfmrRpct": {
+          "value": 1.0,
+          "comment": ""
+        },
+        "transmissionXfmrNLLpct": {
+          "value": 0.4,
+          "comment": ""
+        },
+        "transmissionXfmrImagpct": {
+          "value": 1.0,
+          "comment": ""
+        },
+        "xfmrMargin": {
+          "value": 1.20,
+          "comment": ""
+        }
       },
       "fncs_case": {
         "value": "",
@@ -48,9 +51,19 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": "../",
         "comment": "wrt outpath"
       },
-      "weatherpath": {
-        "value": "./",
-        "comment": ""
+      "climate": {
+        "weatherpath": {
+          "value": "./",
+          "comment": ""
+        },
+        "weatherName": {
+          "value": "weather",
+          "comment": ""
+        },
+        "interpolate": {
+          "value": "QUADRATIC",
+          "comment": ""
+        }
       },
       "outpath": {
         "value": "./",
@@ -64,21 +77,13 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": 100.0,
         "comment": ""
       },
-      "xfmrMargin": {
-        "value": 1.20,
-        "comment": ""
-      },
       "fuseMargin": {
         "value": 2.50,
         "comment": ""
       },
-      "starttime": {
-        "value": "2010-06-01 00:00:00",
-        "comment": ""
-      },
-      "endtime": {
-        "value": "2010-06-03 00:00:00",
-        "comment": ""
+      "simtime": {
+      	"starttime":"2010-06-01 00:00:00",
+      	"endtime":"010-06-03 00:00:00"
       },
       "timestep": {
         "value": 15,
@@ -88,7 +93,7 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": 300,
         "comment": ""
       },
-      "use_fncs": {
+      "use_helics": {
         "value": "True",
         "comment": ""
       },
@@ -96,21 +101,23 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": "True",
         "comment": ""
       },
-      "use_Eplus": {
-        "value": "True",
-        "comment": ""
-      },
-      "Eplus_Bus": {
-        "value": "",
-        "comment": ""
-      },
-      "Eplus_Volts": {
-        "value": 480,
-        "comment": ""
-      },
-      "Eplus_kVA": {
-        "value": 150.0,
-        "comment": ""
+      "Eplus": {
+        "use_Eplus": {
+          "value": "True",
+          "comment": ""
+        },
+        "Eplus_Bus": {
+          "value": "",
+          "comment": ""
+        },
+        "Eplus_Volts": {
+          "value": 480,
+          "comment": ""
+        },
+        "Eplus_kVA": {
+          "value": 150.0,
+          "comment": ""
+        }
       },
       "electric_cooling_percentage": {
         "value": 0.0,
@@ -152,10 +159,6 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": 0.0,
         "comment": ""
       },
-      "weatherName": {
-        "value": "weather",
-        "comment": ""
-      },
       "storage_inv_mode": {
         "value": "LOAD_FOLLOWING",
         "comment": ""
@@ -164,54 +167,113 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         "value": "AZ-Tucson_International_Ap.tmy3",
         "comment": ""
       },
-      "bill_mode": {
-        "value": "UNIFORM",
-        "comment": ""
+      "billing": {
+        "bill_mode": {
+          "value": "UNIFORM",
+          "comment": ""
+        },
+        "kwh_price": {
+          "value": 0.1243,
+          "comment": ""
+        },
+        "monthly_fee": {
+          "value": 5.00,
+          "comment": ""
+        },
+        "tier1_energy": {
+          "value": 0.0,
+          "comment": ""
+        },
+        "tier1_price": {
+          "value": 0.0,
+          "comment": ""
+        },
+        "tier2_energy": {
+          "value": 0.0,
+          "comment": ""
+        },
+        "tier2_price": {
+          "value": 0.0,
+          "comment": ""
+        },
+        "tier3_energy": {
+          "value": 0.0,
+          "comment": ""
+        },
+        "tier3_price": {
+          "value": 0.0,
+          "comment": ""
+        }
       },
-      "kwh_price": {
-        "value": 0.1243,
-        "comment": ""
+      "solar":{
+        "inv_undersizing": {
+          "value": 1.0,
+          "comment": ""
+        },
+        "array_efficiency": {
+          "value": 0.2,
+          "comment": ""
+        },
+        "rated_insolation": {
+          "value": 1000.0,
+          "comment": ""
+        },
+        "tilt_angle": {
+          "value":{} ,
+          "comment":""
+        },
+        "tilt_angle_distribution": {
+          "value":{} ,
+          "comment":""
+        },
+        "azimuth": {
+          "value":{} ,
+          "comment":""
+        },
+        "azimuth_distributions": {
+          "value":{} ,
+          "comment":""
+        }
       },
-      "monthly_fee": {
-        "value": 5.00,
-        "comment": ""
-      },
-      "tier1_energy": {
-        "value": 0.0,
-        "comment": ""
-      },
-      "tier1_price": {
-        "value": 0.0,
-        "comment": ""
-      },
-      "tier2_energy": {
-        "value": 0.0,
-        "comment": ""
-      },
-      "tier2_price": {
-        "value": 0.0,
-        "comment": ""
-      },
-      "tier3_energy": {
-        "value": 0.0,
-        "comment": ""
-     },
-      "tier3_price": {
-        "value": 0.0,
-        "comment": ""
-      },
-      "inv_undersizing": {
-        "value": 1.0,
-        "comment": ""
-      },
-      "array_efficiency": {
-        "value": 0.2,
-        "comment": ""
-      },
-      "rated_insolation": {
-        "value": 1000.0,
-        "comment": ""
-      },
+      "ZIPload_parameters": [
+        {
+        "heatgain_fraction":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "impedance_pf":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "current_pf":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "power_pf":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "impedance_fraction":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "current_fraction":
+        {
+          "value": 0,
+          "comment": 0
+        },
+        "power_fraction":
+        {
+          "value": 0,
+          "comment": 0
+        }
+      }
+    ],
       "techdata": {
         "value": 
         [
@@ -225,7 +287,7 @@ https://github.com/pnnl/tesp/tree/master/src/tesp_support/tesp_support
         ],
         "comment": ""
       },
-      "tiName": {
+      "thermal_integrity_level": {
         "value": [
           "VERY_LITTLE",
           "LITTLE",

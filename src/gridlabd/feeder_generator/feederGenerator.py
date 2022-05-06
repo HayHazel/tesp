@@ -486,7 +486,7 @@ def Find3PhaseXfmrKva (kva):
         float: the kva size, or 0 if none found
     """
     #kva *= xfmrMargin
-    kva *= ConfigDict['xfmrMargin']['value']
+    kva *= ConfigDict['xmfr']['xfmrMargin']['value']
     for row in ConfigDict['three_phase']['value']:
         if row[0] >= kva:
             return row[0]
@@ -509,7 +509,7 @@ def Find1PhaseXfmrKva (kva):
         float: the kva size, or 0 if none found
     """
     #kva *= xfmrMargin
-    kva *= ConfigDict['xfmrMargin']['value']
+    kva *= ConfigDict['xmfr']['xfmrMargin']['value']
     for row in ConfigDict['single_phase']['value']:
         if row[0] >= kva:
             return row[0]
@@ -694,20 +694,20 @@ def write_tariff (op):
     Args:
         op (file): an open GridLAB-D input file
     """
-    print ('  bill_mode', ConfigDict['bill_mode']['value'] + ';', file=op)
-    print ('  price', '{:.4f}'.format (ConfigDict['kwh_price']['value']) + ';', file=op)
-    print ('  monthly_fee', '{:.2f}'.format (ConfigDict['monthly_fee']['value']) + ';', file=op)
+    print ('  bill_mode', ConfigDict['billing']['bill_mode']['value'] + ';', file=op)
+    print ('  price', '{:.4f}'.format (ConfigDict['billing']['kwh_price']['value']) + ';', file=op)
+    print ('  monthly_fee', '{:.2f}'.format (ConfigDict['billing']['monthly_fee']['value']) + ';', file=op)
     print ('  bill_day 1;', file=op)
-    if 'TIERED' in ConfigDict['bill_mode']['value']:
-        if ConfigDict['tier1_energy']['value'] > 0.0:
-            print ('  first_tier_energy', '{:.1f}'.format (ConfigDict['tier1_energy']['value']) + ';', file=op)
-            print ('  first_tier_price', '{:.6f}'.format (ConfigDict['tier1_price']['value']) + ';', file=op)
-        if ConfigDict['tier2_energy']['value'] > 0.0:
-            print ('  second_tier_energy', '{:.1f}'.format (ConfigDict['tier2_energy']['value']) + ';', file=op)
-            print ('  second_tier_price', '{:.6f}'.format (ConfigDict['tier2_price']['value']) + ';', file=op)
-        if ConfigDict['tier3_energy']['value'] > 0.0:
-            print ('  third_tier_energy', '{:.1f}'.format (ConfigDict['tier3_energy']['value']) + ';', file=op)
-            print ('  third_tier_price', '{:.6f}'.format (ConfigDict['tier3_price']['value']) + ';', file=op)
+    if 'TIERED' in ConfigDict['billing']['bill_mode']['value']:
+        if ConfigDict['billing']['tier1_energy']['value'] > 0.0:
+            print ('  first_tier_energy', '{:.1f}'.format (ConfigDict['billing']['tier1_energy']['value']) + ';', file=op)
+            print ('  first_tier_price', '{:.6f}'.format (ConfigDict['billing']['tier1_price']['value']) + ';', file=op)
+        if ConfigDict['billing']['tier2_energy']['value'] > 0.0:
+            print ('  second_tier_energy', '{:.1f}'.format (ConfigDict['billing']['tier2_energy']['value']) + ';', file=op)
+            print ('  second_tier_price', '{:.6f}'.format (ConfigDict['billing']['tier2_price']['value']) + ';', file=op)
+        if ConfigDict['billing']['tier3_energy']['value'] > 0.0:
+            print ('  third_tier_energy', '{:.1f}'.format (ConfigDict['billing']['tier3_energy']['value']) + ';', file=op)
+            print ('  third_tier_price', '{:.6f}'.format (ConfigDict['billing']['tier3_price']['value']) + ';', file=op)
 
 #***************************************************************************************************
 #***************************************************************************************************
@@ -1774,7 +1774,8 @@ def write_houses(basenode, op, vnom, bIgnoreThermostatSchedule=True, bWriteServi
         print ('  name', hsename + ';', file=op)
         print ('  parent', hse_m_name + ';', file=op)
         print ('  groupid', ConfigDict['bldgTypeName']['value'][bldg] + ';', file=op)
-        print ('  // thermal_integrity_level', ConfigDict['tiName']['value'][ti] + ';', file=op)
+        #print ('  // thermal_integrity_level', ConfigDict['tiName']['value'][ti] + ';', file=op)
+        print ('  // thermal_integrity_level', ConfigDict['thermal_integrity_level']['value'][ti] + ';', file=op)
         print ('  schedule_skew', '{:.0f}'.format(skew_value) + ';', file=op)
         print ('  floor_area', '{:.0f}'.format(floor_area) + ';', file=op)
         print ('  number_of_stories', str(stories) + ';', file=op)
@@ -1852,24 +1853,24 @@ def write_houses(basenode, op, vnom, bIgnoreThermostatSchedule=True, bWriteServi
         print ('  object ZIPload { // responsive', file=op)
         print ('    schedule_skew', '{:.0f}'.format(skew_value) + ';', file=op)
         print ('    base_power', 'responsive_loads*' + '{:.2f}'.format(resp_scalar) + ';', file=op)
-        print ('    heatgain_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][0]) + ';', file=op)
-        print ('    impedance_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][1]) + ';', file=op)
-        print ('    current_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][2]) + ';', file=op)
-        print ('    power_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][3]) + ';', file=op)
-        print ('    impedance_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][4]) + ';', file=op)
-        print ('    current_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][5]) + ';', file=op)
-        print ('    power_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][6]) + ';', file=op)
+        print ('    heatgain_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['heatgain_fraction']['value'][0]) + ';', file=op)
+        print ('    impedance_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['impedance_pf']['value'][1]) + ';', file=op)
+        print ('    current_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['current_pf']['value'][2]) + ';', file=op)
+        print ('    power_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['power_pf']['value'][3]) + ';', file=op)
+        print ('    impedance_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['impedance_fraction']['value'][4]) + ';', file=op)
+        print ('    current_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['current_fraction']['value'][5]) + ';', file=op)
+        print ('    power_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['power_fraction']['value'][6]) + ';', file=op)
         print ('  };', file=op)
         print ('  object ZIPload { // unresponsive', file=op)
         print ('    schedule_skew', '{:.0f}'.format(skew_value) + ';', file=op)
         print ('    base_power', 'unresponsive_loads*' + '{:.2f}'.format(unresp_scalar) + ';', file=op)
-        print ('    heatgain_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][0]) + ';', file=op)
-        print ('    impedance_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][1]) + ';', file=op)
-        print ('    current_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][2]) + ';', file=op)
-        print ('    power_pf', '{:.2f}'.format(ConfigDict['techdata']['value'][3]) + ';', file=op)
-        print ('    impedance_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][4]) + ';', file=op)
-        print ('    current_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][5]) + ';', file=op)
-        print ('    power_fraction', '{:.2f}'.format(ConfigDict['techdata']['value'][6]) + ';', file=op)
+        print ('    heatgain_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['heatgain_fraction']['value'][0]) + ';', file=op)
+        print ('    impedance_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['impedance_pf']['value'][1]) + ';', file=op)
+        print ('    current_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['current_pf']['value'][2]) + ';', file=op)
+        print ('    power_pf', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['power_pf']['value'][3]) + ';', file=op)
+        print ('    impedance_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['impedance_fraction']['value'][4]) + ';', file=op)
+        print ('    current_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['current_fraction']['value'][5]) + ';', file=op)
+        print ('    power_fraction', '{:.2f}'.format(ConfigDict['ZIPload_parameters']['power_fraction']['value'][6]) + ';', file=op)
         print ('  };', file=op)
         if np.random.uniform (0, 1) <= ConfigDict['water_heater_percentage']['value']: # ConfigDict['rgnPenElecWH']['value'][rgn-1]:
           heat_element = 3.0 + 0.5 * np.random.randint (1,6);  # numpy randint (lo, hi) returns lo..(hi-1)
@@ -1942,7 +1943,7 @@ def write_houses(basenode, op, vnom, bIgnoreThermostatSchedule=True, bWriteServi
                 elif panel_area > 270:
                     panel_area = 270
                 #inv_power = inv_undersizing * (panel_area/10.7642) * rated_insolation * array_efficiency
-                inv_power = ConfigDict['inv_undersizing']['value'] * (panel_area/10.7642) * ConfigDict['rated_insolation']['value'] * ConfigDict['array_efficiency']['value']
+                inv_power = ConfigDict['solar']['inv_undersizing']['value'] * (panel_area/10.7642) * ConfigDict['solar']['rated_insolation']['value'] * ConfigDict['solar']['array_efficiency']['value']
                 ConfigDict['solar_count']['value'] += 1
                 ConfigDict['solar_kw']['value'] += 0.001 * inv_power
                 print ('object {:s} {{'.format (meter_class), file=op)
@@ -1963,7 +1964,7 @@ def write_houses(basenode, op, vnom, bIgnoreThermostatSchedule=True, bWriteServi
                 print ('    object solar {', file=op)
                 print ('      name', solname + ';', file=op)
                 print ('      panel_type SINGLE_CRYSTAL_SILICON;', file=op)
-                print ('      efficiency','{:.2f}'.format(ConfigDict['array_efficiency']['value']) + ';', file=op)
+                print ('      efficiency','{:.2f}'.format(ConfigDict['solar']['array_efficiency']['value']) + ';', file=op)
                 print ('      area','{:.2f}'.format(panel_area) + ';', file=op)
                 print ('    };', file=op)
                 if ConfigDict['metrics_interval']['value'] > 0:
@@ -2032,7 +2033,9 @@ def write_substation(op, name, phs, vnom, vll):
     """
     # if this feeder will be combined with others, need USE_FNCS to appear first as a marker for the substation
     if len(ConfigDict['fncs_case']['value']) > 0:
-        print('#ifdef USE_FNCS', file=op)
+        #print('#ifdef USE_FNCS', file=op)
+        print('#ifdef USE_HELICS',file=op)
+
         print('object fncs_msg {', file=op)
         if ConfigDict["forERCOT"]['value'] == "True":
             # print ('  name gridlabd' + fncs_case + ';', file=op)
@@ -2057,11 +2060,11 @@ def write_substation(op, name, phs, vnom, vll):
     print('  install_type PADMOUNT;', file=op)
     print('  primary_voltage', '{:.2f}'.format(ConfigDict['transmissionVoltage']['value']) + ';', file=op)
     print('  secondary_voltage', '{:.2f}'.format(vll) + ';', file=op)
-    print('  power_rating', '{:.2f}'.format(ConfigDict['transmissionXfmrMVAbase']['value'] * 1000.0) + ';', file=op)
-    print('  resistance', '{:.2f}'.format(0.01 * ConfigDict['transmissionXfmrRpct']['value']) + ';', file=op)
-    print('  reactance', '{:.2f}'.format(0.01 * ConfigDict['transmissionXfmrXpct']['value']) + ';', file=op)
-    print('  shunt_resistance', '{:.2f}'.format(100.0 / ConfigDict['transmissionXfmrNLLpct']['value']) + ';', file=op)
-    print('  shunt_reactance', '{:.2f}'.format(100.0 / ConfigDict['transmissionXfmrImagpct']['value']) + ';', file=op)
+    print('  power_rating', '{:.2f}'.format(ConfigDict['xmfr']['transmissionXfmrMVAbase']['value'] * 1000.0) + ';', file=op)
+    print('  resistance', '{:.2f}'.format(0.01 * ConfigDict['xmfr']['transmissionXfmrRpct']['value']) + ';', file=op)
+    print('  reactance', '{:.2f}'.format(0.01 * ConfigDict['xmfr']['transmissionXfmrXpct']['value']) + ';', file=op)
+    print('  shunt_resistance', '{:.2f}'.format(100.0 / ConfigDict['xmfr']['transmissionXfmrNLLpct']['value']) + ';', file=op)
+    print('  shunt_reactance', '{:.2f}'.format(100.0 / ConfigDict['xmfr']['transmissionXfmrImagpct']['value']) + ';', file=op)
     print('}', file=op)
     print('object transformer {', file=op)
     print('  name substation_transformer;', file=op)
@@ -2077,7 +2080,7 @@ def write_substation(op, name, phs, vnom, vll):
     print('  bustype SWING;', file=op)
     print('  nominal_voltage', '{:.2f}'.format(vsrcln) + ';', file=op)
     print('  positive_sequence_voltage', '{:.2f}'.format(vsrcln) + ';', file=op)
-    print('  base_power', '{:.2f}'.format(ConfigDict['transmissionXfmrMVAbase']['value'] * 1000000.0) + ';', file=op)
+    print('  base_power', '{:.2f}'.format(ConfigDict['xmfr']['transmissionXfmrMVAbase']['value'] * 1000000.0) + ';', file=op)
     print('  power_convergence_value 100.0;', file=op)
     print('  phases', phs + ';', file=op)
     if ConfigDict['metrics_interval']['value'] > 0:
@@ -2361,9 +2364,11 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
                 line, octr = obj(None, model, line, itr, h, octr)
             else:  # should be the pre-amble, need to replace timestamp and stoptime
                 if 'timestamp' in line:
-                    print('  timestamp \'' + ConfigDict['starttime']['value'] + '\';', file=op)
+#                    print('  timestamp \'' + ConfigDict['starttime']['value'] + '\';', file=op)
+                    print('  timestamp \'' + ConfigDict['simtime']['starttime'] + '\';', file=op)
                 elif 'stoptime' in line:
-                    print('  stoptime \'' + ConfigDict['endtime']['value'] + '\';', file=op)
+#                    print('  stoptime \'' + ConfigDict['endtime']['value'] + '\';', file=op)
+                    print('  stoptime \'' + ConfigDict['simtime']['endtime'] + '\';', file=op)
                 else:
                     print(line, file=op)
 
@@ -2422,8 +2427,8 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
             if 'ndata' in data:
                 kva = accumulate_load_kva(data['ndata'])
                 # need to account for large-building loads added through transformer connections
-                if n1 == ConfigDict['Eplus_Bus']['value']:
-                    kva += ConfigDict['Eplus_kVA']['value']
+                if n1 == ConfigDict['Eplus']['Eplus_Bus']['value']:
+                    kva += ConfigDict['Eplus']['Eplus_kVA']['value']
                 if kva > 0:
                     total_kva += kva
                     nodes = nx.shortest_path(G, n1, swing_node)
@@ -2467,10 +2472,19 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
             print('};', file=op)
         print('object climate {', file=op)
         print('  name localWeather;', file=op)
-        print('  // tmyfile "' + ConfigDict['weatherpath']['value'] + ConfigDict['weather_file']['value'] + '";',
+
+
+        #print('  // tmyfile "' + ConfigDict['weatherpath']['value'] + ConfigDict['weather_file']['value'] + '";',
+        #      file=op)
+        print('  // tmyfile "' + ConfigDict['climate']['weatherpath']['value'] + ConfigDict['climate']['weather_file']['value'] + '";',
               file=op)
-        print('  // agent name', ConfigDict['weatherName']['value'], file=op)
-        print('  interpolate QUADRATIC;', file=op)
+        #print('  // agent name', ConfigDict['weatherName']['value'], file=op)
+        print('  // agent name', ConfigDict['climate']['weatherName']['value'], file=op)
+        #print('  interpolate QUADRATIC;', file=op)
+        print('  interpolate ' + ConfigDict['climate']['interpolate'] +';', file=op)
+
+
+
         print('  latitude', str(ConfigDict['latitude']['value']) + ';', file=op)
         print('  longitude', str(ConfigDict['longitude']['value']) + ';', file=op)
         print('  // altitude', str(ConfigDict['altitude']['value']) + ';', file=op)
@@ -2640,13 +2654,13 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
         write_voltage_class(model, h, 'meter', op, vln, vll, secnode)
         if ConfigDict["forERCOT"]['value'] == "False":
             write_voltage_class(model, h, 'load', op, vln, vll, secnode)
-        if len(ConfigDict['Eplus_Bus']['value']) > 0 and ConfigDict['Eplus_Volts']['value'] > 0.0 and \
-                ConfigDict['Eplus_kVA']['value'] > 0.0:
+        if len(ConfigDict['Eplus']['Eplus_Bus']['value']) > 0 and ConfigDict['Eplus']['Eplus_Volts']['value'] > 0.0 and \
+                ConfigDict['Eplus']['Eplus_kVA']['value'] > 0.0:
             print('////////// EnergyPlus large-building load ///////////////', file=op)
-            row = Find3PhaseXfmr(ConfigDict['Eplus_kVA']['value'])
+            row = Find3PhaseXfmr(ConfigDict['Eplus']['Eplus_kVA']['value'])
             actual_kva = row[0]
             watts_per_phase = 1000.0 * actual_kva / 3.0
-            Eplus_vln = ConfigDict['Eplus_Volts']['value'] / math.sqrt(3.0)
+            Eplus_vln = ConfigDict['Eplus']['Eplus_Volts']['value'] / math.sqrt(3.0)
             vstarta = format(Eplus_vln, '.2f') + '+0.0j'
             vstartb = format(-0.5 * Eplus_vln, '.2f') + format(-0.866025 * Eplus_vln, '.2f') + 'j'
             vstartc = format(-0.5 * Eplus_vln, '.2f') + '+' + format(0.866025 * Eplus_vln, '.2f') + 'j'
@@ -2656,7 +2670,7 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
             print('  install_type PADMOUNT;', file=op)
             print('  power_rating', str(actual_kva) + ';', file=op)
             print('  primary_voltage ' + str(vll) + ';', file=op)
-            print('  secondary_voltage ' + format(ConfigDict['Eplus_Volts']['value'], '.1f') + ';', file=op)
+            print('  secondary_voltage ' + format(ConfigDict['Eplus']['Eplus_Volts']['value'], '.1f') + ';', file=op)
             print('  resistance ' + format(row[1], '.5f') + ';', file=op)
             print('  reactance ' + format(row[2], '.5f') + ';', file=op)
             print('  shunt_resistance ' + format(1.0 / row[3], '.2f') + ';', file=op)
@@ -2665,7 +2679,7 @@ def ProcessTaxonomyFeeder(outname, rootname, vll, vln, avghouse, avgcommercial):
             print('object transformer {', file=op)
             print('  name ' + ConfigDict['name_prefix']['value'] + 'Eplus_transformer;', file=op)
             print('  phases ABCN;', file=op)
-            print('  from', ConfigDict['name_prefix']['value'] + ConfigDict['Eplus_Bus']['value'] + ';', file=op)
+            print('  from', ConfigDict['name_prefix']['value'] + ConfigDict['Eplus']['Eplus_Bus']['value'] + ';', file=op)
             print('  to', ConfigDict['name_prefix']['value'] + 'Eplus_meter;', file=op)
             print('  configuration ' + ConfigDict['name_prefix']['value'] + 'Eplus_transformer_configuration;', file=op)
             print('}', file=op)
@@ -2851,7 +2865,7 @@ def populate_feeder(configfile=None, config=None, taxconfig=None, fgconfig=None)
     tespdir = os.path.expandvars(os.path.expanduser(config['SimulationConfig']['SourceDirectory']))
     ConfigDict['glmpath']['value'] = tespdir + '/feeders/'
     ConfigDict['supportpath']['value'] = ''  # tespdir + '/schedules'
-    ConfigDict['weatherpath']['value'] = ''  # tespdir + '/weather'
+    ConfigDict['climate']['weatherpath']['value'] = ''  # tespdir + '/weather'
     if 'NamePrefix' in config['BackboneFiles']:
         ConfigDict['name_prefix']['value'] = config['BackboneFiles']['NamePrefix']
     if 'WorkingDirectory' in config['SimulationConfig']:
@@ -2860,8 +2874,10 @@ def populate_feeder(configfile=None, config=None, taxconfig=None, fgconfig=None)
     else:
         # outpath = './' + config['SimulationConfig']['CaseName'] + '/'
         ConfigDict['outpath']['value'] = './' + config['SimulationConfig']['CaseName'] + '/'
-    ConfigDict['starttime']['value'] = config['SimulationConfig']['StartTime']
-    ConfigDict['endtime']['value'] = config['SimulationConfig']['EndTime']
+#    ConfigDict['starttime']['value'] = config['SimulationConfig']['StartTime']
+    ConfigDict['simtime']['starttime'] = config['SimulationConfig']['StartTime']
+#    ConfigDict['endtime']['value'] = config['SimulationConfig']['EndTime']
+    ConfigDict['simtime']['endtime'] = config['SimulationConfig']['EndTime']
     ConfigDict['timestep']['value'] = int(config['FeederGenerator']['MinimumStep'])
     ConfigDict['metrics_interval']['value'] = int(config['FeederGenerator']['MetricsInterval'])
     ConfigDict['electric_cooling_percentage']['value'] = 0.01 * float(
@@ -2874,26 +2890,26 @@ def populate_feeder(configfile=None, config=None, taxconfig=None, fgconfig=None)
     ConfigDict['solar_inv_mode']['value'] = config['FeederGenerator']['SolarInverterMode']
     ConfigDict['storage_inv_mode']['value'] = config['FeederGenerator']['StorageInverterMode']
     ConfigDict['weather_file']['value'] = config['WeatherPrep']['DataSource']
-    ConfigDict['bill_mode']['value'] = config['FeederGenerator']['BillingMode']
-    ConfigDict['kwh_price']['value'] = float(config['FeederGenerator']['Price'])
-    ConfigDict['monthly_fee']['value'] = float(config['FeederGenerator']['MonthlyFee'])
-    ConfigDict['tier1_energy']['value'] = float(config['FeederGenerator']['Tier1Energy'])
-    ConfigDict['tier1_price']['value'] = float(config['FeederGenerator']['Tier1Price'])
-    ConfigDict['tier2_energy']['value'] = float(config['FeederGenerator']['Tier2Energy'])
-    ConfigDict['tier2_price']['value'] = float(config['FeederGenerator']['Tier2Price'])
-    ConfigDict['tier3_energy']['value'] = float(config['FeederGenerator']['Tier3Energy'])
-    ConfigDict['tier3_price']['value'] = float(config['FeederGenerator']['Tier3Price'])
-    ConfigDict['Eplus_Bus']['value'] = config['EplusConfiguration']['EnergyPlusBus']
-    ConfigDict['Eplus_Volts']['value'] = float(config['EplusConfiguration']['EnergyPlusServiceV'])
-    ConfigDict['Eplus_kVA']['value'] = float(config['EplusConfiguration']['EnergyPlusXfmrKva'])
-    ConfigDict["transmissionXfmrMVAbase"]['value'] = float(config['PYPOWERConfiguration']['TransformerBase'])
+    ConfigDict['billing']['bill_mode']['value'] = config['FeederGenerator']['BillingMode']
+    ConfigDict['billing']['kwh_price']['value'] = float(config['FeederGenerator']['Price'])
+    ConfigDict['billing']['monthly_fee']['value'] = float(config['FeederGenerator']['MonthlyFee'])
+    ConfigDict['billing']['tier1_energy']['value'] = float(config['FeederGenerator']['Tier1Energy'])
+    ConfigDict['billing']['tier1_price']['value'] = float(config['FeederGenerator']['Tier1Price'])
+    ConfigDict['billing']['tier2_energy']['value'] = float(config['FeederGenerator']['Tier2Energy'])
+    ConfigDict['billing']['tier2_price']['value'] = float(config['FeederGenerator']['Tier2Price'])
+    ConfigDict['billing']['tier3_energy']['value'] = float(config['FeederGenerator']['Tier3Energy'])
+    ConfigDict['billing']['tier3_price']['value'] = float(config['FeederGenerator']['Tier3Price'])
+    ConfigDict['Eplus']['Eplus_Bus']['value'] = config['EplusConfiguration']['EnergyPlusBus']
+    ConfigDict['Eplus']['Eplus_Volts']['value'] = float(config['EplusConfiguration']['EnergyPlusServiceV'])
+    ConfigDict['Eplus']['Eplus_kVA']['value'] = float(config['EplusConfiguration']['EnergyPlusXfmrKva'])
+    ConfigDict['xmfr']["transmissionXfmrMVAbase"]['value'] = float(config['PYPOWERConfiguration']['TransformerBase'])
     ConfigDict["transmissionVoltage"]['value'] = 1000.0 * float(config['PYPOWERConfiguration']['TransmissionVoltage'])
     ConfigDict['latitude']['value'] = float(config['WeatherPrep']['Latitude'])
     ConfigDict['longitude']['value'] = float(config['WeatherPrep']['Longitude'])
     ConfigDict['altitude']['value'] = float(config['WeatherPrep']['Altitude'])
     ConfigDict['tz_meridian']['value'] = float(config['WeatherPrep']['TZmeridian'])
     if 'AgentName' in config['WeatherPrep']:
-        ConfigDict['weatherName']['value'] = config['WeatherPrep']['AgentName']
+        ConfigDict['climate']['weatherName']['value'] = config['WeatherPrep']['AgentName']
 
     ConfigDict['house_nodes']['value'] = {}
     ConfigDict['small_nodes']['value'] = {}
@@ -2913,10 +2929,10 @@ def populate_feeder(configfile=None, config=None, taxconfig=None, fgconfig=None)
             ConfigDict['glmpath']['value'] = taxconfig['glmpath']
             ConfigDict['outpath']['value'] = taxconfig['outpath']
             ConfigDict['supportpath']['value'] = taxconfig['supportpath']
-            ConfigDict['weatherpath']['value'] = taxconfig['weatherpath']
+            ConfigDict['climate']['weatherpath']['value'] = taxconfig['weatherpath']
             print(ConfigDict['fncs_case']['value'], rootname, vll, vln, avg_house, avg_comm,
                   ConfigDict['glmpath']['value'], ConfigDict['outpath']['value'], ConfigDict['supportpath']['value'],
-                  ConfigDict['weatherpath']['value'])
+                  ConfigDict['climate']['weatherpath']['value'])
             ProcessTaxonomyFeeder(ConfigDict['fncs_case']['value'], rootname, vll, vln, avg_house,
                                   avg_comm)  # need a name_prefix mechanism
         else:
@@ -2924,12 +2940,13 @@ def populate_feeder(configfile=None, config=None, taxconfig=None, fgconfig=None)
     else:
         print('using the built-in taxonomy')
         print(rootname, 'to', ConfigDict['outpath']['value'], 'using', ConfigDict['weather_file']['value'])
-        print('times', ConfigDict['starttime']['value'], ConfigDict['endtime']['value'])
+#        print('times', ConfigDict['starttime']['value'], ConfigDict['endtime']['value'])
+        print('times', ConfigDict['simtime']['starttime'], ConfigDict['simtime']['endtime'])
         print('steps', ConfigDict['timestep']['value'], ConfigDict['metrics_interval']['value'])
         print('hvac', ConfigDict['electric_cooling_percentage']['value'])
         print('pv', ConfigDict['solar_percentage']['value'], ConfigDict['solar_inv_mode']['value'])
         print('storage', ConfigDict['storage_percentage']['value'], ConfigDict['storage_inv_mode']['value'])
-        print('billing', ConfigDict['kwh_price']['value'], ConfigDict['monthly_fee']['value'])
+        print('billing', ConfigDict['billing']['kwh_price']['value'], ConfigDict['billing']['monthly_fee']['value'])
         for c in ConfigDict['taxchoice']['value']:
             if c[0] == rootname:
                 ConfigDict['fncs_case']['value'] = config['SimulationConfig']['CaseName']
@@ -2977,4 +2994,3 @@ if __name__ == "__main__":
 	initialize_config_dict(args.config_file)
 	populate_all_feeders()
 	
-
