@@ -60,6 +60,10 @@
           "value": "weather",
           "comment": ""
         },
+        "weather_file": {
+          "value": "AZ-Tucson_International_Ap.tmy3",
+          "comment": ""
+      },
         "interpolate": {
           "value": "QUADRATIC",
           "comment": ""
@@ -161,10 +165,6 @@
       },
       "storage_inv_mode": {
         "value": "LOAD_FOLLOWING",
-        "comment": ""
-      },
-      "weather_file": {
-        "value": "AZ-Tucson_International_Ap.tmy3",
         "comment": ""
       },
       "billing": {
@@ -785,7 +785,7 @@
       	"outname": "R1-12.47-3_populated",
       	"rootname": "R1-12.47-3",
       	"vll": 12470.0,
-      	"vnl": 7200.0,
+      	"vln": 7200.0,
       	"avghouse": 4000.0,
       	"avgcommercial": 20000.0
       },
