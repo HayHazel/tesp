@@ -3,8 +3,9 @@ ARG UBUNTU_VERSION=:20.04
 
 FROM ${UBUNTU}${UBUNTU_VERSION} AS ubuntu-base
 
-ENV USER_NAME=tesp-user
-ENV TESP_HOME=/home/${USER_NAME}
+# TESP user name and work directory
+ENV USER_NAME=worker
+ENV USER_HOME=/home/$USER_NAME
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
   export DEBCONF_NONINTERACTIVE_SEEN=true && \
@@ -58,14 +59,14 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   usermod -aG sudo ${USER_NAME}
 
 USER ${USER_NAME}
-WORKDIR ${TESP_HOME}
+WORKDIR ${USER_HOME}
 
 FROM ubuntu-base AS tesp-production
 
 # TESP exports
-ENV INSTDIR=${TESP_HOME}/tesp/tenv
-ENV REPODIR=${TESP_HOME}/tesp/repository
-ENV TESPDIR=${TESP_HOME}/tesp/repository/tesp
+ENV TESPDIR=${USER_HOME}/tesp
+ENV INSTDIR=${USER_HOME}/tesp/tenv
+ENV REPODIR=${USER_HOME}/tesp/repository
 ENV TESPBUILD=$TESPDIR/scripts/build
 ENV TESPHELPR=$TESPDIR/scripts/helpers
 
@@ -95,23 +96,21 @@ RUN git config --global user.name "${USER_NAME}" && \
   git config --global user.email "${USER_NAME}@${USER_NAME}.com" && \
   echo "User .name=${USER_NAME} and .email=${USER_NAME}@${USER_NAME}.com have been set for git repositories!" && \
   git config --global credential.helper store && \
-  echo "Create directory structure for TESP" && \
+  echo "Clone directory structure for TESP" && \
   cd ${HOME} || exit && \
-  mkdir -p tesp && \
-  cd tesp || exit && \
+  echo "++++++++++++++ TESP" && \
+  git clone -b main https://github.com/pnnl/tesp.git && \
+  cd ${TESPDIR} || exit && \
   mkdir -p repository && \
   mkdir -p tenv && \
   python3.8 -m pip install virtualenv && \
   "${HOME}/.local/bin/virtualenv" venv --prompt TESP && \
-  cd repository || exit && \
-  echo "++++++++++++++ TESP" && \
-  git clone -b main https://github.com/pnnl/tesp.git && \
-  echo "Download all relevant repositories..." && \
-  echo "++++++++++++++ PSST" && \
   echo "Copy TESP environment variables to $HOME/tespEnv" && \
-  cp tesp/scripts/tespEnv "$HOME/" && \
+  cp ${TESPDIR}/scripts/tespEnv "$HOME/" && \
   echo "Activate the python virtual environment" && \
-  . $HOME/tesp/venv/bin/activate && \
+  . ${TESPDIR}/venv/bin/activate && \
+  echo "Download all relevant repositories..." && \
+  cd ${REPODIR} || exit && \
   echo "++++++++++++++ PSST" && \
   git clone -b master https://github.com/ames-market/AMES-V5.0.git && \
   echo "Applying the patch for AMES...... from ${TESPBUILD}" && \
