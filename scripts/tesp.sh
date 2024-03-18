@@ -200,7 +200,7 @@ if [[ $binaries == "develop" ]]; then
 
   echo
   echo ++++++++++++++ KLU SOLVER
-  svn export https://github.com/gridlab-d/tools/tree/master/solver_klu/source/KLU_DLL
+  svn export https://github.com/gridlab-d/tools/tree/klu-build-update/solver_klu/source/KLU_DLL
 fi
 
 # Compile all relevant executables
